@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "name": "Module: train with MultiMaterial",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--data_path=/tmp/datasets/MultiMaterial",
+                "--model_path=/tmp/models/MultiMaterial"
+            ]
+        },
+        {
+            "name": "Module: train with FluidShake",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--data_path=/tmp/datasets/FluidShake",
+                "--model_path=/tmp/models/FluidShake"
+            ]
+        },
+        {
+            "name": "Module: train with Sand",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--data_path=/tmp/datasets/Sand",
+                "--model_path=/tmp/models/Sand"
+            ]
+        },
+        {
+            "name": "Module: train with WaterRamps",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--data_path=/tmp/datasets/WaterRamps",
+                "--model_path=/tmp/models/WaterRamps"
+            ]
+        }
+    ]
+}

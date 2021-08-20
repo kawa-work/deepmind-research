@@ -53,6 +53,8 @@ def convert_to_tensor(x, encoded_dtype):
     out = []
     for el in x:
       out.append(np.frombuffer(el.numpy(), dtype=encoded_dtype))
+      # print("---print with frombuffer---")
+      # print(np.frombuffer(el.numpy(), dtype=encoded_dtype))
   out = tf.convert_to_tensor(np.array(out))
   return out
 
