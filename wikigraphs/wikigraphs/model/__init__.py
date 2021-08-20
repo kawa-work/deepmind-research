@@ -27,17 +27,8 @@
 #     https://creativecommons.org/licenses/by/4.0/legalcode
 #
 # ==============================================================================
-"""Setup for pip package."""
-from setuptools import find_packages
-from setuptools import setup
-
-setup(
-    name='wikigraphs',
-    version='0.0.2',
-    description='A Wikipedia - knowledge graph paired dataset.',
-    url='https://github.com/deepmind/deepmind-research/tree/master/wikigraphs',
-    author='DeepMind',
-    author_email='luyuwang@google.com',
-    packages=find_packages(),
-    license='Apache 2.0',
-)
+"""WikiGraphs model modules."""
+from . import embedding
+from . import graph_net
+from . import transformer
+from . import transformer_block
