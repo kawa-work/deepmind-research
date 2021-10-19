@@ -97,7 +97,7 @@ def main(unused_argv):
   unused_animation = animation.FuncAnimation(
       fig, update,
       frames=np.arange(0, num_steps, FLAGS.step_stride), interval=10)
-  unused_animation.save("./render_rollout.gif", writer = 'imagemagick')
+  unused_animation.save("./learning_to_simulate/images/render_rollout.gif", writer = 'imagemagick')
 
 
 if __name__ == "__main__":

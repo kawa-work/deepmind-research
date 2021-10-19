@@ -194,7 +194,7 @@ def get_input_fn(data_path, batch_size, mode, split):
     np.set_printoptions(threshold=np.inf)
     tensor = ds.make_one_shot_iterator().get_next()
     with tf.Session() as session:
-        with open('./input_data.txt', mode='w') as f:
+        with open('./learning_to_simulate/data/input_data.txt', mode='w') as f:
           f.write(session.run(tensor).__str__())
     print("====")
     if mode.startswith('one_step'):

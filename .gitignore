@@ -1,2 +1,5 @@
 *.pyc
 
+learning_to_simulate/images/*
+learning_to_simulate/data/*
+
