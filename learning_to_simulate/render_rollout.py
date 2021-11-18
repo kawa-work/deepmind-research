@@ -48,7 +48,7 @@ TYPE_TO_COLOR = {
     7: "magenta",  # Goop.
     6: "gold",  # Sand.
     5: "blue",  # Water.
-    9: "red",  # Person
+    8: "red",  # Person
 }
 
 
