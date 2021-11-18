@@ -190,13 +190,13 @@ def get_input_fn(data_path, batch_size, mode, split):
     ds = tf.data.TFRecordDataset([os.path.join(data_path, f'{split}.tfrecord')])
     ds = ds.map(functools.partial(
         reading_utils.parse_serialized_simulation_example, metadata=metadata))
-    print("==ds after parse==")
-    np.set_printoptions(threshold=np.inf)
-    tensor = ds.make_one_shot_iterator().get_next()
-    with tf.Session() as session:
-        with open('./learning_to_simulate/data/input_data.txt', mode='w') as f:
-          f.write(session.run(tensor).__str__())
-    print("====")
+    # print("==ds after parse==")
+    # np.set_printoptions(threshold=np.inf)
+    # tensor = ds.make_one_shot_iterator().get_next()
+    # with tf.Session() as session:
+    #     with open('./learning_to_simulate/data/input_data.txt', mode='w') as f:
+    #       f.write(session.run(tensor).__str__())
+    # print("====")
     if mode.startswith('one_step'):
       # Splits an entire trajectory into chunks of 7 steps.
       # Previous 5 velocities, current velocity and target.
