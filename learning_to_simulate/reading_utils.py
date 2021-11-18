@@ -106,6 +106,12 @@ def parse_serialized_simulation_example(example_proto, metadata):
       inp=[context['particle_type'].values],
       Tout=[tf.int64])
   context['particle_type'] = tf.reshape(context['particle_type'], [-1])
+  # Decode destination explicitly
+  context['destination'] = tf.py_function(
+      functools.partial(convert_fn, encoded_dtype=np.int64),
+      inp=[context['destination'].values],
+      Tout=[tf.int64])
+  context['destination'] = tf.reshape(context['destination'], [-1])
   return context, parsed_features
 
 
@@ -125,6 +131,9 @@ def split_trajectory(context, features, window_length=7):
   # Prepare the context features per step.
   model_input_features['particle_type'] = tf.tile(
       tf.expand_dims(context['particle_type'], axis=0),
+      [input_trajectory_length, 1])
+  model_input_features['destination'] = tf.tile(
+      tf.expand_dims(context['destination'], axis=0),
       [input_trajectory_length, 1])
 
   if 'step_context' in features:
