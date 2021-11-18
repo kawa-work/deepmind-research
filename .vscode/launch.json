@@ -60,7 +60,7 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--mode='eval_rollout'",
+                "--mode=eval_rollout",
                 "--data_path=/tmp/datasets/SocialForceModel",
                 "--model_path=/tmp/models/SocialForceModel",
                 "--output_path=/tmp/rollouts/SocialForceModel"
@@ -70,7 +70,7 @@
             "name": "Module: Plot a trajectory",
             "type": "python",
             "request": "launch",
-            "module": "learning_to_simulate.train",
+            "module": "learning_to_simulate.render_rollout",
             "args": [
                 "--rollout_path=/tmp/rollouts/SocialForceModel/rollout_test_0.pkl"
             ]
