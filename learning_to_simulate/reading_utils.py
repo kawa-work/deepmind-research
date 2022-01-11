@@ -42,7 +42,9 @@ _FEATURE_DTYPES = {
 
 _CONTEXT_FEATURES = {
     'key': tf.io.FixedLenFeature([], tf.int64, default_value=0),
-    'particle_type': tf.io.VarLenFeature(tf.string)
+    'particle_type': tf.io.VarLenFeature(tf.string),
+    'destination_x': tf.io.VarLenFeature(tf.string),
+    'destination_y': tf.io.VarLenFeature(tf.string)
 }
 
 
@@ -107,11 +109,16 @@ def parse_serialized_simulation_example(example_proto, metadata):
       Tout=[tf.int64])
   context['particle_type'] = tf.reshape(context['particle_type'], [-1])
   # Decode destination explicitly
-  context['destination'] = tf.py_function(
-      functools.partial(convert_fn, encoded_dtype=np.int64),
-      inp=[context['destination'].values],
-      Tout=[tf.int64])
-  context['destination'] = tf.reshape(context['destination'], [-1])
+  context['destination_x'] = tf.py_function(
+      functools.partial(convert_fn, encoded_dtype=np.float32),
+      inp=[context['destination_x'].values],
+      Tout=[tf.float32])
+  context['destination_x'] = tf.reshape(context['destination_x'], [-1])
+  context['destination_y'] = tf.py_function(
+      functools.partial(convert_fn, encoded_dtype=np.float32),
+      inp=[context['destination_y'].values],
+      Tout=[tf.float32])
+  context['destination_y'] = tf.reshape(context['destination_y'], [-1])
   return context, parsed_features
 
 
@@ -132,8 +139,11 @@ def split_trajectory(context, features, window_length=7):
   model_input_features['particle_type'] = tf.tile(
       tf.expand_dims(context['particle_type'], axis=0),
       [input_trajectory_length, 1])
-  model_input_features['destination'] = tf.tile(
-      tf.expand_dims(context['destination'], axis=0),
+  model_input_features['destination_x'] = tf.tile(
+      tf.expand_dims(context['destination_x'], axis=0),
+      [input_trajectory_length, 1])
+  model_input_features['destination_y'] = tf.tile(
+      tf.expand_dims(context['destination_y'], axis=0),
       [input_trajectory_length, 1])
 
   if 'step_context' in features:

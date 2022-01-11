@@ -82,7 +82,7 @@ class LearnedSimulator(snt.AbstractModule):
             [self._num_particle_types, particle_type_embedding_size],
             trainable=True, use_resource=True)
 
-  def _build(self, position_sequence, n_particles_per_example,
+  def _build(self, position_sequence, n_particles_per_example, destination_x, destination_y,
              global_context=None, particle_types=None):
     """Produces a model step, outputting the next position for each particle.
 
@@ -102,7 +102,7 @@ class LearnedSimulator(snt.AbstractModule):
       step into the future from the input sequence.
     """
     input_graphs_tuple = self._encoder_preprocessor(
-        position_sequence, n_particles_per_example, global_context,
+        position_sequence, n_particles_per_example, destination_x, destination_y, global_context,
         particle_types)
 
     normalized_acceleration = self._graph_network(input_graphs_tuple)
@@ -113,7 +113,7 @@ class LearnedSimulator(snt.AbstractModule):
     return next_position
 
   def _encoder_preprocessor(
-      self, position_sequence, n_node, global_context, particle_types):
+      self, position_sequence, n_node, destination_x, destination_y, global_context, particle_types):
     # Extract important features from the position_sequence.
     most_recent_position = position_sequence[:, -1]
     velocity_sequence = time_diff(position_sequence)  # Finite-difference.
@@ -155,6 +155,9 @@ class LearnedSimulator(snt.AbstractModule):
           self._particle_type_embedding, particle_types)
       node_features.append(particle_type_embeddings)
 
+    # Destination
+    node_features.append(tf.stack([destination_x, destination_y], axis=1))
+
     # Collect edge features.
     edge_features = []
 
@@ -177,7 +180,7 @@ class LearnedSimulator(snt.AbstractModule):
           context_stats.std, STD_EPSILON)
 
     return gn.graphs.GraphsTuple(
-        nodes=tf.concat(node_features, axis=-1),
+        nodes=tf.concat(node_features, axis=1),
         edges=tf.concat(edge_features, axis=-1),
         globals=global_context,  # self._graph_net will appending this to nodes.
         n_node=n_node,
@@ -206,7 +209,7 @@ class LearnedSimulator(snt.AbstractModule):
 
   def get_predicted_and_target_normalized_accelerations(
       self, next_position, position_sequence_noise, position_sequence,
-      n_particles_per_example, global_context=None, particle_types=None):  # pylint: disable=g-doc-args
+      n_particles_per_example, destination_x, destination_y, global_context=None, particle_types=None):  # pylint: disable=g-doc-args
     """Produces normalized and predicted acceleration targets.
 
     Args:
@@ -214,7 +217,7 @@ class LearnedSimulator(snt.AbstractModule):
         with the positions the model should output given the inputs.
       position_sequence_noise: Tensor of the same shape as `position_sequence`
         with the noise to apply to each particle.
-      position_sequence, n_node, global_context, particle_types: Inputs to the
+      position_sequence, n_node, destination_x, destination_y, global_context, particle_types: Inputs to the
         model as defined by `_build`.
 
     Returns:
@@ -227,7 +230,7 @@ class LearnedSimulator(snt.AbstractModule):
 
     # Perform the forward pass with the noisy position sequence.
     input_graphs_tuple = self._encoder_preprocessor(
-        noisy_position_sequence, n_particles_per_example, global_context,
+        noisy_position_sequence, n_particles_per_example, destination_x, destination_y, global_context,
         particle_types)
     predicted_normalized_acceleration = self._graph_network(input_graphs_tuple)
 

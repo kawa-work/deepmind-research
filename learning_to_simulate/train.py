@@ -240,6 +240,8 @@ def rollout(simulator, features, num_steps):
         current_positions,
         n_particles_per_example=features['n_particles_per_example'],
         particle_types=features['particle_type'],
+        destination_x=features['destination_x'],
+        destination_y=features['destination_y'],
         global_context=global_context_step)
 
     # Update kinematic particles from prescribed trajectory.
@@ -344,6 +346,8 @@ def get_one_step_estimator_fn(data_path,
         position_sequence_noise=sampled_noise,
         n_particles_per_example=features['n_particles_per_example'],
         particle_types=features['particle_type'],
+        destination_x=features['destination_x'],
+        destination_y=features['destination_y'],
         global_context=features.get('step_context'))
     pred_acceleration, target_acceleration = pred_target
 
@@ -369,6 +373,8 @@ def get_one_step_estimator_fn(data_path,
         position_sequence=features['position'],
         n_particles_per_example=features['n_particles_per_example'],
         particle_types=features['particle_type'],
+        destination_x=features['destination_x'],
+        destination_y=features['destination_y'],
         global_context=features.get('step_context'))
 
     predictions = {'predicted_next_position': predicted_next_position}

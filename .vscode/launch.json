@@ -50,8 +50,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/SocialForceModel",
-                "--model_path=/tmp/models/SocialForceModel"
+                "--data_path=/tmp/datasets/SFM",
+                "--model_path=/tmp/models/SFM"
             ]
         },
         {
@@ -61,9 +61,9 @@
             "module": "learning_to_simulate.train",
             "args": [
                 "--mode=eval_rollout",
-                "--data_path=/tmp/datasets/SocialForceModel",
-                "--model_path=/tmp/models/SocialForceModel",
-                "--output_path=/tmp/rollouts/SocialForceModel"
+                "--data_path=/tmp/datasets/SFM",
+                "--model_path=/tmp/models/SFM",
+                "--output_path=/tmp/rollouts/SFM"
             ]
         },
         {
@@ -72,7 +72,7 @@
             "request": "launch",
             "module": "learning_to_simulate.render_rollout",
             "args": [
-                "--rollout_path=/tmp/rollouts/SocialForceModel/rollout_test_0.pkl"
+                "--rollout_path=/tmp/rollouts/SFM/rollout_test_0.pkl"
             ]
         }
     ]
