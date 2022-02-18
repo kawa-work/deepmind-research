@@ -352,7 +352,8 @@ def get_one_step_estimator_fn(data_path,
     pred_acceleration, target_acceleration = pred_target
 
     # Calculate the loss and mask out loss on kinematic particles/
-    loss = (pred_acceleration - target_acceleration)**2
+    # loss = (pred_acceleration - target_acceleration)**2
+    loss = (simulator - target_next_position)**2
 
     num_non_kinematic = tf.reduce_sum(
         tf.cast(non_kinematic_mask, tf.float32))
