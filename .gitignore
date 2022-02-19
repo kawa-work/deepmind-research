@@ -1,5 +1,9 @@
 *.pyc
 
 learning_to_simulate/images/*
-learning_to_simulate/data/*
+learning_to_simulate/datasets/*
+learning_to_simulate/models/*
+learning_to_simulate/rollouts/*
 
+loss.log
+loss.png
