@@ -109,10 +109,17 @@ class EncodeProcessDecode(snt.AbstractModule):
           output_size=self._latent_size)
       return snt.Sequential([mlp, snt.LayerNorm()])
 
+    def my_build_mlp_with_layer_norm():
+      mlp = build_mlp(
+          hidden_size=self._mlp_hidden_size,
+          num_hidden_layers=4,
+          output_size=self._latent_size)
+      return snt.Sequential([mlp, snt.LayerNorm()])
+
     # The encoder graph network independently encodes edge and node features.
     encoder_kwargs = dict(
-        edge_model_fn=build_mlp_with_layer_norm,
-        node_model_fn=build_mlp_with_layer_norm)
+        edge_model_fn=my_build_mlp_with_layer_norm,
+        node_model_fn=my_build_mlp_with_layer_norm)
     self._encoder_network = gn.modules.GraphIndependent(**encoder_kwargs)
 
     # Create `num_message_passing_steps` graph networks with unshared parameters
@@ -130,7 +137,7 @@ class EncodeProcessDecode(snt.AbstractModule):
     # The decoder MLP decodes node latent features into the output size.
     self._decoder_network = build_mlp(
         hidden_size=self._mlp_hidden_size,
-        num_hidden_layers=self._mlp_num_hidden_layers,
+        num_hidden_layers=4,
         output_size=self._output_size)
 
   def _encode(
