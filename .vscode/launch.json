@@ -10,8 +10,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/MultiMaterial",
-                "--model_path=/tmp/models/MultiMaterial"
+                "--data_path=./learning_to_simulate/datasets/MultiMaterial",
+                "--model_path=./learning_to_simulate/models/MultiMaterial"
             ]
         },
         {
@@ -20,8 +20,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/FluidShake",
-                "--model_path=/tmp/models/FluidShake"
+                "--data_path=./learning_to_simulate/datasets/FluidShake",
+                "--model_path=./learning_to_simulate/models/FluidShake"
             ]
         },
         {
@@ -30,8 +30,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/Sand",
-                "--model_path=/tmp/models/Sand"
+                "--data_path=./learning_to_simulate/datasets/Sand",
+                "--model_path=./learning_to_simulate/models/Sand"
             ]
         },
         {
@@ -40,8 +40,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/WaterRamps",
-                "--model_path=/tmp/models/WaterRamps"
+                "--data_path=./learning_to_simulate/datasets/WaterRamps",
+                "--model_path=./learning_to_simulate/models/WaterRamps"
             ]
         },
         {
@@ -50,8 +50,8 @@
             "request": "launch",
             "module": "learning_to_simulate.train",
             "args": [
-                "--data_path=/tmp/datasets/SFM",
-                "--model_path=/tmp/models/SFM"
+                "--data_path=./learning_to_simulate/datasets/SFM",
+                "--model_path=./learning_to_simulate/models/SFM"
             ]
         },
         {
@@ -61,9 +61,9 @@
             "module": "learning_to_simulate.train",
             "args": [
                 "--mode=eval_rollout",
-                "--data_path=/tmp/datasets/SFM",
-                "--model_path=/tmp/models/SFM",
-                "--output_path=/tmp/rollouts/SFM"
+                "--data_path=./learning_to_simulate/datasets/SFM",
+                "--model_path=./learning_to_simulate/models/SFM",
+                "--output_path=./learning_to_simulate/rollouts/SFM"
             ]
         },
         {
@@ -72,7 +72,7 @@
             "request": "launch",
             "module": "learning_to_simulate.render_rollout",
             "args": [
-                "--rollout_path=/tmp/rollouts/SFM/rollout_test_0.pkl"
+                "--rollout_path=./learning_to_simulate/rollouts/SFM/rollout_test_0.pkl"
             ]
         }
     ]
