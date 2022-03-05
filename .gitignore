@@ -7,3 +7,5 @@ learning_to_simulate/rollouts/*
 
 loss.log
 loss.png
+
+learning_to_simulate/data/*

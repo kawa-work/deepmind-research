@@ -55,6 +55,30 @@
             ]
         },
         {
+            "name": "Module: Evaluate the model",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--mode=eval",
+                "--eval_split=valid",
+                "--data_path=./learning_to_simulate/datasets/SFM",
+                "--model_path=./learning_to_simulate/models/SFM"
+            ]
+        },
+        {
+            "name": "Module: Train and evaluate the model",
+            "type": "python",
+            "request": "launch",
+            "module": "learning_to_simulate.train",
+            "args": [
+                "--mode=train_and_eval",
+                "--eval_split=valid",
+                "--data_path=./learning_to_simulate/datasets/SFM",
+                "--model_path=./learning_to_simulate/models/SFM"
+            ]
+        },
+        {
             "name": "Module: Generate rollouts",
             "type": "python",
             "request": "launch",

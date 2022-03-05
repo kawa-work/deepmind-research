@@ -49,14 +49,14 @@ from learning_to_simulate import reading_utils
 
 
 flags.DEFINE_enum(
-    'mode', 'train', ['train', 'eval', 'eval_rollout'],
+    'mode', 'train', ['train', 'eval', 'eval_rollout', 'train_and_eval'],
     help='Train model, one step evaluation or rollout evaluation.')
 flags.DEFINE_enum('eval_split', 'test', ['train', 'valid', 'test'],
                   help='Split to use when running evaluation.')
 flags.DEFINE_string('data_path', None, help='The dataset directory.')
 flags.DEFINE_integer('batch_size', 2, help='The batch size.')
 flags.DEFINE_integer('num_steps', int(2e7), help='Number of steps of training.')
-flags.DEFINE_float('noise_std', 6.7e-4, help='The std deviation of the noise.')
+flags.DEFINE_float('noise_std', 6.7e-3, help='The std deviation of the noise.')
 flags.DEFINE_string('model_path', None,
                     help=('The path for saving checkpoints of the model. '
                           'Defaults to a temporary directory.'))
@@ -351,9 +351,17 @@ def get_one_step_estimator_fn(data_path,
         global_context=features.get('step_context'))
     pred_acceleration, target_acceleration = pred_target
 
+    predicted_next_position = simulator(
+        position_sequence=features['position'],
+        n_particles_per_example=features['n_particles_per_example'],
+        particle_types=features['particle_type'],
+        destination_x=features['destination_x'],
+        destination_y=features['destination_y'],
+        global_context=features.get('step_context'))
+
     # Calculate the loss and mask out loss on kinematic particles/
     # loss = (pred_acceleration - target_acceleration)**2
-    loss = (simulator - target_next_position)**2
+    loss = (predicted_next_position - target_next_position)**2
 
     num_non_kinematic = tf.reduce_sum(
         tf.cast(non_kinematic_mask, tf.float32))
@@ -370,13 +378,6 @@ def get_one_step_estimator_fn(data_path,
     train_op = opt.minimize(loss, global_step)
 
     # Calculate next position and add some additional eval metrics (only eval).
-    predicted_next_position = simulator(
-        position_sequence=features['position'],
-        n_particles_per_example=features['n_particles_per_example'],
-        particle_types=features['particle_type'],
-        destination_x=features['destination_x'],
-        destination_y=features['destination_y'],
-        global_context=features.get('step_context'))
 
     predictions = {'predicted_next_position': predicted_next_position}
 
@@ -446,7 +447,7 @@ def _read_metadata(data_path):
 def main(_):
   """Train or evaluates the model."""
 
-  if FLAGS.mode in ['train', 'eval']:
+  if FLAGS.mode in ['train', 'eval', 'train_and_eval']:
     estimator = tf.estimator.Estimator(
         get_one_step_estimator_fn(FLAGS.data_path, FLAGS.noise_std),
         model_dir=FLAGS.model_path)
@@ -456,6 +457,14 @@ def main(_):
           input_fn=get_input_fn(FLAGS.data_path, FLAGS.batch_size,
                                 mode='one_step_train', split='train'),
           max_steps=FLAGS.num_steps)
+    elif FLAGS.mode == 'train_and_eval':
+      train_spec = tf.estimator.TrainSpec(input_fn=get_input_fn(
+        FLAGS.data_path, FLAGS.batch_size, mode='one_step_train', split='train'
+      ), max_steps=FLAGS.num_steps)
+      eval_spec = tf.estimator.EvalSpec(input_fn=get_input_fn(
+          FLAGS.data_path, FLAGS.batch_size, mode='one_step', split=FLAGS.eval_split
+          ), throttle_secs=60)
+      tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
     else:
       # One-step evaluation from checkpoint.
       eval_metrics = estimator.evaluate(input_fn=get_input_fn(
